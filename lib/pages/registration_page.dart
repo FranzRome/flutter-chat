@@ -1,4 +1,5 @@
 import 'package:chat/components/form_input_field.dart';
+import 'package:chat/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class _RegisterPageState extends State<RegistrationPage> {
   String? email;
   String? password;
   String? confirmPassword;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +79,16 @@ class _RegisterPageState extends State<RegistrationPage> {
                           }
                         }),
                     const SizedBox(height: 20),
-                    ElevatedButton(onPressed: () {
-                      _formKey.currentState?.validate();
+                    isLoading ? const CircularProgressIndicator() : ElevatedButton(onPressed: () async {
+                      if(_formKey.currentState?.validate() == true) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await AuthRepository.registration(email!, password!);
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
                     }, child: const Text("Registrati"))
                   ],
                 ))
