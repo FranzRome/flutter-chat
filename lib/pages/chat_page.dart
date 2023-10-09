@@ -1,3 +1,4 @@
+import 'package:chat/repository/chat_repository.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
@@ -8,6 +9,16 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  String message = "";
+
+  TextEditingController? textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    textEditingController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,18 +36,30 @@ class _ChatPageState extends State<ChatPage> {
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Expanded(
+              Expanded(
                   child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                    decoration: InputDecoration(
+                  controller: textEditingController,
+                    decoration: const InputDecoration(
                         hintText: "Scrivi un messaggio",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(100.0)),
-                        ))),
+                        )),
+                    onChanged: (value) {
+                      setState(() {
+                        message = value;
+                      });
+                    }),
               )),
               IconButton(
-                onPressed: () {},
+                onPressed: message.isEmpty ? null : () {
+                  ChatRepository.sendMessage(message);
+                  textEditingController?.clear();
+                  setState(() {
+                    message = "";
+                  });
+                },
                 icon: const Icon(Icons.send),
               ),
             ],
@@ -45,4 +68,11 @@ class _ChatPageState extends State<ChatPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    textEditingController?.dispose();
+    super.dispose();
+  }
+
 }
