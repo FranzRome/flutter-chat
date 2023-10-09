@@ -1,21 +1,19 @@
 import 'package:chat/components/form_input_field.dart';
-import 'package:chat/pages/login_page.dart';
 import 'package:chat/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegistrationPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegistrationPage> {
+class _LoginPageState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
   String? email;
   String? password;
-  String? confirmPassword;
   bool isLoading = false;
 
   @override
@@ -32,7 +30,7 @@ class _RegisterPageState extends State<RegistrationPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Crea il tuo account",
+                  "Accedi",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -61,50 +59,25 @@ class _RegisterPageState extends State<RegistrationPage> {
                         onChanged: (value) {
                           password = value;
                         },
-                        validator: (value) {
-                          if(value == null || value.length<6) {
-                            return "Inserisci una password di almeno 6 caratteri";
-                          }
-                        }
                     ),
-                    FormInputField(
-                        hintText: "Conferma Password",
-                        iconData: Icons.password,
-                        obscureText: true,
-                        onChanged: (value) {
-                          confirmPassword = value;
-                        },
-                        validator: (value) {
-                          if(confirmPassword == null || password != confirmPassword) {
-                            return "Le due password non corrispondono";
-                          }
-                        }),
                     const SizedBox(height: 20),
                     isLoading ? const CircularProgressIndicator() : ElevatedButton(onPressed: () async {
                       if(_formKey.currentState?.validate() == true) {
                         setState(() {
                           isLoading = true;
                         });
-                        final registrationSuccess = await AuthRepository.registration(email!, password!);
+                        final loginSuccess = await AuthRepository.signIn(email!, password!);
                         setState(() {
                           isLoading = false;
                         });
-
-                        if(registrationSuccess) {
+                        if(loginSuccess) {
                           //navigate to chat page
                         }
                         else {
                           ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(content: Text("Errore durante la registrazione")));
+                              .showSnackBar(const SnackBar(content: Text("Errore durante l'accesso")));
                         }
                       }
-                    }, child: const Text("Registrati")),
-                    const SizedBox(height: 40),
-                    const Text("Hai già un account?"),
-                    ElevatedButton(onPressed: ()  {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const LoginPage())
-                      );
                     }, child: const Text("Accedi"))
                   ],
                 ))
