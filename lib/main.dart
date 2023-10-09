@@ -1,3 +1,5 @@
+import 'package:chat/pages/chat_page.dart';
+import 'package:chat/pages/login_page.dart';
 import 'package:chat/pages/registration_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const RegistrationPage(),
+      routes: {
+        '/': (context) => const RegistrationPage(),
+        '/login': (context) => const LoginPage(),
+        '/chat': (context) => const ChatPage(),
+      },
     );
   }
 }

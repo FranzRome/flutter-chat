@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                           isLoading = false;
                         });
                         if(loginSuccess) {
-                          //navigate to chat page
+                          Navigator.of(context).pushNamed("/chat");
                         }
                         else {
                           ScaffoldMessenger.of(context)

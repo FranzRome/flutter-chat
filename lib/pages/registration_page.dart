@@ -91,7 +91,7 @@ class _RegisterPageState extends State<RegistrationPage> {
                         });
 
                         if(registrationSuccess) {
-                          //navigate to chat page
+                          Navigator.of(context).pushNamed("/chat");
                         }
                         else {
                           ScaffoldMessenger.of(context)
@@ -102,9 +102,7 @@ class _RegisterPageState extends State<RegistrationPage> {
                     const SizedBox(height: 40),
                     const Text("Hai già un account?"),
                     ElevatedButton(onPressed: ()  {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const LoginPage())
-                      );
+                      Navigator.of(context).pushNamed("/login");
                     }, child: const Text("Accedi"))
                   ],
                 ))
